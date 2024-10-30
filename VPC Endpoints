@@ -1,0 +1,19 @@
+VPC Endpoint consists of two types
+1. VPC Endpoint Interface
+2. VPC Endpoint Gateway
+
+VPC Endpoint Interface:
+- Provisions on ENI (Private IP address) as an entry point (must attach a security group)
+- Supports most AWS services
+- $ per hour + $ per GB usage
+
+VPC Gateway Endpoint:
+- Provisions a Gateway and must be used as a target in a route table (does not use security group)
+- Supports both S3 and DynamoDb
+- Free
+
+
+What to use?
+Gateway most likely prefered solution in exams
+Interface Endpoint is preferable over Gateway Endpoint when you need access from on-premises (Site to Site VPN or Direct Connect), a different VPC or a different region)
+
