@@ -1,0 +1,16 @@
+Purpose of transit gateway is to reduce the transitive peering of multiple VPC's and on-premises, hub-and-spoke (star) connection
+Transit gateway is a regional resource, can work cross region as well
+We can share transit gateway using resource access manager
+We can peer transit gateways across regions
+Route Tables: limit which VPC can talk with other VPC
+Works with Direct Connect Gateway, VPN connections
+Supports IP Multicast ( not supported by any other Aws service )
+
+Another Usercase:
+Trasit gateway: Site to Site VPN ECMP
+ECMP = equal Cost multi-path
+Routing strategy to allow to forward a packet over multiple best paths
+Use Case: crete multi site to site vpn connections to increase bandwidth of your connection to aws
+basically increases throughput
+
+$ per GB of TGW (transit gateway) processed data
