@@ -5,3 +5,14 @@ Stateless Web App: WhatIsTheTime.com
 - Start small and can accept downtime
 - Want to fully scale vertically and horizontally, no downtime
 
+Concepts which will be explored as part of this solution:
+
+Public IP vs Private IP and EC2 instances
+Elastic IP vs Route53 vs Load Balancers
+Route 53 TTL, A records and Alias Records
+Maintaining Ec2 instances manually vs Auto Scaling Groups
+Multi AZ to survive disasters
+ELB health checks
+Security Group Rules
+reservation o capacity for cost saving on Ec2 instance usage when possible
+
