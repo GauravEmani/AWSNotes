@@ -1,0 +1,7 @@
+Stateless Web App: WhatIsTheTime.com
+
+- Allow people to know the time
+- We dont need a database
+- Start small and can accept downtime
+- Want to fully scale vertically and horizontally, no downtime
+
