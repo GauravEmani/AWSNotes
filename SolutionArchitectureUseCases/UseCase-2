@@ -1,0 +1,35 @@
+MyClothes.com 
+- Allow people to buy clothes online
+- Thers's a shopping cart
+- Website will have hundreds of users accessing at the same time
+- We need to scale, maintain horizontal scalability and keep our web application as stateless as possible
+- User should have their details (name, address etc. ) in a database
+- Users should not lose their shopping cart
+
+What will we need to setup this architecture?
+1. Route53 Domain for users to access a single domain
+2. Elastic Load Balancer ( ALB ) to balance loads
+3. Multi AZ - to remediate AZ failure
+4. Auto Scaling groups - this will help scale the number of EC2 instances based on load
+5. Elastic Cache - this will help store the users cart  - Multi AZ
+6. RDS to help store the User details for future use, also use read replicas (upto 15 are allowed ) - Multi AZ
+
+Send session_id in cookie to maintain the stateful transations 
+
+
+Point which have come across while setting up this solution:
+Due to stateless behaviour, every request from the user might land on different EC2, and the cart info would be lost.
+ELB sticky sessions (session affinity) - this will redirect all the traffic from the user to one ec2 instance, but will cause an issue if the EC2 instance goes down
+Web clients for storing cookies and making our web app stateless - this will increase the cookie size, max allowed is upto 4KB, also client side cookies can be tampered
+
+Elastic Cache
+- For storing sessions ( alternative: Dynamo DB)  - only session-id will be part of the client side cookie
+- For Caching data from RDS ( such as name, address etc..)
+- Multi AZ - applicable across AZ
+
+RDS:
+- For storing user data
+- Read replicas fior scaling reads
+- Multi AZ for disaster recovery
+
+Tight security with security groups referencing each other
