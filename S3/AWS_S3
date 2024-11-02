@@ -45,8 +45,37 @@ S3 Bucket Policies:
   - Actions: This defines the type of action which is to be either allowed/denied on the mentioned bucket  { "Action": "s3:GetObject" }
   - Principal: The account or user to apply the policy to - { "Principal": "*" }
 
+Example:
+{
+  "Id": "Policy1730538692953",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1730538687442",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::emani-demo-s3",
+      "Principal": "*"
+    }
+  ]
+}
+
+
 - User S3 bucket for policy to:
   - grant public access to the bucket
   - force objects to be encrypted at upload
   - grant access to other accounts
 
+Bucket Settings for Block Public Access
+- These settings were created to prevent company data leaks
+- If you know your bucket should never be public then leave these settings on
+- Can be set at account level
+
+Website Hosting:
+- S3 can host static websites and make them accessible over the internet
+- The website URL will be (depending on the region)
+   http://bucket-name.s3-website-aws-region.amazonaws.com
+   or 
+   http://bucket-name.s3-website.aws-region.amazonaws.com
