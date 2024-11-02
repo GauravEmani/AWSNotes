@@ -1,0 +1,52 @@
+Amazon S3 Use Cases
+- Backup and Restore
+- Disaster Recovery
+- Archive
+- Hybrid Cloud Storgae
+- Application hosting
+- Media hosting
+- Data lakes and big data analytics
+- software updates
+- static website
+
+S3 stores files(objects) into buckets (directories)
+Buckets must have globally unique name
+Buckets are defined at region level
+S3 looks like a global service but buckets are regions specific
+
+Features of S3
+- Max object size: 5TB
+- Use multipart when uploading more than 5GB objects
+- Metadata (list of text key/value pairs - system or user metadata)
+- Tages (Unicode key/value pairs - upto 10) - useful for security/lifecycle
+- Version ID ( if versioinig is enabled)
+
+
+S3 Security:
+User Based
+  - IAM Policies - which API calls should be allowed for a specific user from IAM
+
+Resource Based
+  - Bucket Policies - bucket wide rulesfrom the S3 console -allows cross account
+  - Object Access control list (ACL) - finer grained (can be disabled)
+  - Bucket Access control list (ACL) - lass common (can be disabled)
+
+Note: an IAM principal can access an S3 object if
+  - The user IAM permission ALLOW it OR the resource policy ALLOWS it
+  - AND there is not explicit DENY
+
+Encryption:
+  Encrypt the objects using encryption key
+
+S3 Bucket Policies:
+- JSON based policies
+  - Resources: buckets and objects to which this policy applies - "Resource": [ "arm:aws:s3:::examplebucket/*" ]
+  - Effect: Allow/Deny - allowss or denies a speciific action on the mentioned bucket/s { "Effect": Allow" }
+  - Actions: This defines the type of action which is to be either allowed/denied on the mentioned bucket  { "Action": "s3:GetObject" }
+  - Principal: The account or user to apply the policy to - { "Principal": "*" }
+
+- User S3 bucket for policy to:
+  - grant public access to the bucket
+  - force objects to be encrypted at upload
+  - grant access to other accounts
+
