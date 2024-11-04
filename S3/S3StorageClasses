@@ -33,4 +33,40 @@ S3 Infrequent Access:
 
 Amazon S3 Standard-Infrequent Access (S3 Standard - IA)
 - 99.9% availabilty
-- Use Cases: Disaster Recovery 
+- Use Cases: Disaster Recovery, backups
+
+Amazon S3 One Zone-Infrequent Access (S3 One Zone-IA)
+- High Durability (99.999999999% in a single AZ; data lost when AZ is destroyed
+- 99.5% avialability
+- Use Cases: Storing secondary backup copies of on-premise data, or data you can recreate
+
+S3 Glacier Storage Classes:
+- Low cost object storage meant for archiving/backup
+- pricing: price for storage + price for data retrieval
+
+Amazon S3 Glacier Instanct Retrieval:
+- millisecs retrieval, great for data accessed once a quarter
+- minimum storage duration is of 90 days
+
+Amazon S3 Glacier Flexibel Retrieval:
+- Expedited (1 - 5 mins), Standard(3 - 5 hours), Bulk( 5 - 12 hours) -free
+- minimum storage duration is of 90 days
+
+Amazon S3 Glacier Deep Archive Retrieval - for long term storage:
+- Standard (12 hours), Bulk(48 hours)
+- minimum storage duration is of 90 days
+
+S3 Intelligent Tiering:
+- Small monthly monitoring and auto-tiering fee
+- Moves objects automatically between Access Tiers based on usage
+- There are no retrieval charges in S3 intelligent-tiering
+
+Following classes can be configured as part of intelligent tiering:
+
+- frequent access tier(automatic): defuat tier
+- infrequent access tier(automatic): objects not accessed for 30days
+- archive instant access tier(automatic): objects not accessed for 90 days
+- archive access tier (optional): configurable from 90 days to 700+ days
+- deep arhcive access tier (optional): configurable from 180 days to 700+ days
+
+
