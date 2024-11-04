@@ -1,0 +1,36 @@
+S3 Storage Classes:
+  - S3 Standard - General Purpose
+  - S3 Standard - Infrequent Access (IA)
+  - S3 One Zone-Infrequent Access
+  - S3 Glacier Instant Retrieval
+  - Glacier lexible Retrieval
+  - Glacier Deep Archive
+  - Intelligent Tiering
+
+We can move objects between these classes manually or using S3 lifecycle configurations
+
+Durability: 
+- High Durability (99.99999999999, 11 9's) of the objects across multiple AZ's
+- If you store 10,000,000 objects with Amazon S3, then on an average you can expect to incur a loss of a single object once every 10,000 years
+- Same for all types of storage classes
+
+Availability:
+- Measure how readily available a service is
+- Varies depending on storage class
+- Example: S3 standard has 99.99% availability, this means that it will not be available for 53 minutes in a year
+
+S3 Standard - General Purpose:
+- 99.99% availability
+- used for frequently accessed data
+- low latency and high throughput
+- can sustain 2 concurrent facility failures
+
+User Cases: Big Data Analytics, mobile and gaming applications , content distribution...
+
+S3 Infrequent Access:
+- For data that is less frequently accessssed, but requires rapid access when needed
+- Lower cost than S3 standard
+
+Amazon S3 Standard-Infrequent Access (S3 Standard - IA)
+- 99.9% availabilty
+- Use Cases: Disaster Recovery 
