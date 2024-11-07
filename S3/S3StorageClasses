@@ -44,11 +44,11 @@ S3 Glacier Storage Classes:
 - Low cost object storage meant for archiving/backup
 - pricing: price for storage + price for data retrieval
 
-Amazon S3 Glacier Instanct Retrieval:
+Amazon S3 Glacier Instant Retrieval:
 - millisecs retrieval, great for data accessed once a quarter
 - minimum storage duration is of 90 days
 
-Amazon S3 Glacier Flexibel Retrieval:
+Amazon S3 Glacier Flexible Retrieval:
 - Expedited (1 - 5 mins), Standard(3 - 5 hours), Bulk( 5 - 12 hours) -free
 - minimum storage duration is of 90 days
 
@@ -63,10 +63,104 @@ S3 Intelligent Tiering:
 
 Following classes can be configured as part of intelligent tiering:
 
-- frequent access tier(automatic): defuat tier
+- frequent access tier(automatic): default tier
 - infrequent access tier(automatic): objects not accessed for 30days
 - archive instant access tier(automatic): objects not accessed for 90 days
 - archive access tier (optional): configurable from 90 days to 700+ days
 - deep arhcive access tier (optional): configurable from 180 days to 700+ days
+
+
+AWS S3 Lifecycle rules:
+We can configure transition actions or expiration actions or to certain prefix or certain object tags
+Transition Actions:
+- configure objects to transition to another storage class
+- move objects to standard IA after 60 dys of creation
+- move objects to glacier for archiving after 6 months
+
+Expiration Actions:
+- Access log files can be setto delete after 365 days
+- can be used to delete older versions of files ( if versioning is enabled )
+- can be used to delete incomplete multi-part uploads
+
+Rules can be created for a certain prefix (example: s3://mybucket/mp3/*)
+Rules can be created for certain object Tags (example: Department: Finance)
+
+Scenario 1:
+Your application on Ec2 instance creates thumbnails of images after profile phots are uploaded to amazon S3. These thumbnails can be easily recreated
+,and only need to be kept for 60 days. The source images should be able to be immediately retrieved for these 60 days, and afterwards, the 
+user can wait up to 6 hours. How would you design this?
+
+Design:
+Standard S3 for source images - transition to S3 Flexible Glacier after 60 days
+Thumbnails to be kept in S3 single zone IA - since these can be recreated
+Setup a lifecycle policy to delete thumbnails after 60 days from Single zone IA bucket
+
+Scenario 2:
+A rule in your company states that you should be able to recover your deleted S3 objects immediately for 30 days, although this may happen rarely.
+After this time, and for upto 365 days, deleted objects should be recoverable withing 48 hours.
+
+Design:
+Enable versioning
+S3 Standard Access bucket to be user intially for object storage
+Transition the non-current versions(previous versions) of the object to Standard IA
+After 30 days move these objects to S3 Glacier Deep Archive since the recoverable time is mentioned as 48 hours for 365 days
+
+How to determing the optimum number of days - Storage class analysis ??
+Use S3 Analytics on your S3 buckets
+- This is recommended for Standard and Standar IA
+  - Does not work for One Zone IA or Glacier
+- Report is updated daily
+- 24 to 48 hours to start seeing data analysis
+S3 analytics will generate a csv report on a daily basis
+
+S3 - Requestor Pays
+- In General, bucket owner pays for S3 Storage and the data transfer costs associated with their bucket.
+- S3 Storage cost $ + Networking Cost $
+- With Requestor pay buckets, the requestor instead of the bucket owner pays the cost of the request and the data download from the bucket
+- Helpful when you want to share large datasets with other accounts
+- Requestor must be authenticated with AWS ( cannot be anonymous) 
+
+S3 event notifications
+These are notifications S3::ObjectCreated, S3::ObjectRemoved, S3::ObjectRestore, S3::REplication ....
+Object name filtering possible (*.jpg)
+Use Case:
+ - generate thumbnails of images uploaded to S3
+
+Can create as many S3 events as desired
+S3 notifications typically deliver the events in a matter of seconds or can somtimes take upto a minute or longer
+
+Example: If you want to sent the events to a target such as SNS, SQS or Lambda then you need to add a resource policy on S3 bucket to be able to access
+the SNS,SQS or lambda. We dont use IAM roles on S3.
+
+S3 event notification with Amazon EventBridge:
+  -  We can use the EventBridge to write rules on the events received from S3 to send to over 18 AWS services as destinations
+  S3 -> events -> EventBridge -> rules -> send to over 18 AWS services
+  - EventBridge has advanced filtering options with JSON rules( metadata, object size, name...)
+  - Multiple Destinations - eg: Step Functions, Kinesis Streams / Firehose
+  - EventBridge capabilities - Archive, Replay Events, Reliable delivery
+
+S3 Baseline Performance:
+- S3 automatically scales to high request rates, latency 100-200ms
+- Your application can achieve at least 3500 PUT/POST/COPY/DELETE or 5500 GET/HEAd requests per second per prefix in a bucket
+Example:
+  bucket/names/test/file -> prefix is (/names/test/)
+  bucket/1/file -> prefix is (/1/)
+
+If we spread the reads across prefixes then we get a 11000 requests per second for GET and HEAD
+
+Improve S3 Perfomamce:
+- Multi part upload
+  - recommended for files >100 MB, must use files > 5GB
+  - Can help parallelize uploads (speed up transfers)
+
+- S3 transfer acceleration
+  - Increase transfer speed by transferring file to AWS edge location which will the transfer the file to AWS S3 bucket in the target region
+  - compatoble with multi-part upload
+
+S3 Performance: Byte Range fetches:
+- parallelize GET requests by specifying the byte range
+- better resilience in case of failures
+
+
 
 
