@@ -161,6 +161,22 @@ S3 Performance: Byte Range fetches:
 - parallelize GET requests by specifying the byte range
 - better resilience in case of failures
 
+S3 Batch Operations:
+- Perform bulk operations on existing s3 objects with a single request
+  - modify the metadata and properties
+  - copy objects between s3 buckets
+  - encrypt the unencrypted objects
+  - modify ACL's tags
+  - restore objects from glacier
+  - invoke lambda function to perform custom actions on each object
+- A job consists of list of objects, action to perform and optional parameters
+- S3 batch operations manages retries, tracks progress sends completion notifications, generates reports...
+- You can use S3 invetory to get objects list and use S3 Select to filter your objects
 
-
+S3 Storage Lens:
+- Analyse and optimse storage across entire AWS Org
+- Discover and anomalies, identify cost efficiecies and apply data protection best practices
+- Aggregate data for org, specific accounts,regions, buckets or prefixes
+- Default dasboard or create your own dashboards
+- Can be configured to export metrics daily to an S3 bucket
 
