@@ -1,0 +1,60 @@
+Load Balancers are servers that forward traffic to multiple servers (eg: EC2)
+
+Why to use load balancers?
+- Spread load across mutiple downstream instances
+- Expose a single point of access (DNS) to your application
+- Seamlessly handle failures of downstream instances
+- Do regular health check of your instances
+- Provide SSL termination(HTTTPS) for your websites
+- Enforce stickiness with cookies
+- High availability across zones
+- Separate public traffic from private traffic
+
+Why use Elastic Load Balancer?
+- ELB is managed service
+- AWS guarentees its working, upgrades, maintenance, HA
+- AWS helps provision this with ease
+- Alhough it would cost less to setup your load balancer but there would be a lot of effort
+- ELB is integrated with many AWS offerings/services
+  - Ec2, EC2 Auto Scaling Groups, Amazon ECS, AWS Certicate Manager, CloudWatch, Route 53, AWS WAF, AWS Global Accelerator
+
+Health check:
+- Enables the LB to know if the instances its forwading the traffic to is avialable 
+- Health check is done on a port and route
+  - Protocol: HTTP
+  - Port: 4567
+  - Endpoint: /health
+
+AWS has 4 types of load balancers:
+Classic Load Balancer (v1 - old generation - 2009 - CLB)
+  - HTTP, HTTPS, TCP, SSL (secure TCP)
+Application Laod Balancer (v2 - new generation - 2016 - ALB)
+  - HTTP, HTTPS, Websocket
+Network Load Balancer (v2 - new generation - 2017 - NLB)
+  - TCP, TLS (Secure TCP, UDP
+Gateway Load Balancer - 2020 GWLB
+  - Operates at layer 3(Network Layer) - IP Protocol
+
+Elastic load balancers can be setup as internal (private) or externa (public)
+
+Application Load Balancer (Layer 7 - HTTP)
+- Load balancing to multiple applications HTTP across machines (target groups)
+- Load balancing to multiple application on the same machine(eg:- containers)
+- support for http/2 and web sockets
+- supports redirects (http to https)
+- routing based on path in url (example.com/users and example.com/posts)
+- routing based on hostname (one.exmaple.com and other.example.com)
+- routing based on Query Strings, Headers (example.com/users?id=233&order=false)
+- ALB's are a great fit for microservices and container basd application
+- In comparison we would need multiple classic load balancer per application
+
+Advantages:
+- fixed hostname (XXX>regios.elb.amazonaws.com)
+- Appliction servers dont see the IP of the client directly
+  - The true IP of the client is inserted in the header X-Forwaded-For
+  - We can also get post(X-Forwaded-Port) and proto(X-Forwaded-Proto)
+
+
+
+
+
