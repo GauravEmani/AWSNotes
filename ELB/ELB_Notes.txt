@@ -84,4 +84,12 @@ Combine the following funcitons:
 Uses GENEVE protocol on port 6081
 
 
+Application Load Balancer (ALB) is the right choice for a web application that requires connection stickiness with duration-based session affinity, as it supports advanced request routing and allows the implementation of sticky sessions using cookies that can be set with a custom expiration period. ALBs are designed to operate at Layer 7 (Application Layer) of the OSI model, which is suitable for HTTP/HTTPS traffic, common in web applications.
+
+The Classic Load Balancer does support sticky sessions, but it is a legacy option and does not offer the advanced routing capabilities of ALBs. Additionally, the Classic Load Balancer operates both at Layer 4 (Transport Layer) and Layer 7, which might not be optimal for the requirements of the question.
+
+Network Load Balancer (NLB) operates at Layer 4 and is optimized for high-performance, low-latency TCP/UDP traffic, generally without the need for advanced request routing based on content. It uses source IP persistence, which is not the same as duration-based session affinity. Thus, NLB would not be the best fit for the specified requirements.
+
+Gateway Load Balancer is designed to distribute traffic to appliances such as firewalls and intrusion detection systems and does not directly cater to session stickiness requirements in the same manner as an Application Load Balancer; hence, it is also not the correct choice for the stipulated scenario.
+
 
