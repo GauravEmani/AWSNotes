@@ -72,3 +72,16 @@ Network Load Balancers target groups:
 since one elastic IP per AZ is dedicated to NLB, and then we can also use the rules of ALB to further divert traffic as per our need
 - Heath Checks supported by the network load balancer target groups include TCP, HTTP and HTTPS protocol
 
+Gateway Load Balancers: Operates at Layer 3 Network Layer (IP Packets)
+- Deploy scale and manage a fleet of 3rd party netwokr virtual appliances in AWS
+- Example: Firewalls, Intrusion Detection and Prevention Ssytem, Deep Packet Inspection Systems, Payload Manipulation
+- Gateway load balancer helps analyse the traffic using 3rd party security virual appliances on Network Layer at IP Packets level
+
+Combine the following funcitons:
+- Transport Network Gateway: Single entry/exit for all traffic
+- Load Balancer: sitribute traffic to your virtual appliances
+
+Uses GENEVE protocol on port 6081
+
+
+
