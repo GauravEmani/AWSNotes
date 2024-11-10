@@ -5,3 +5,18 @@ The mention of 'SSL on port 443 with SNI mandatory' is slightly incorrect becaus
 The option stating 'HTTP on port 443 with TLS termination' is incorrect because HTTP on port 443 is not a standard practice. Secure HTTP traffic is known as HTTPS, and it should be specified as such. TLS termination does imply the use of encryption, but the correct term for the protocol on port 443 is HTTPS, not HTTP.
 
 Lastly, the use of 'TCP on port 443 using SSL certificates' is not as specific as it could be, since HTTPS is the specific application protocol over TCP that uses SSL/TLS for security on port 443. While technically accurate that HTTPS operates over TCP, the mention of 'TCP' alone does not adequately convey that we are discussing web traffic, nor does it specify the use of SNI for that traffic.
+
+
+AWS Application Load Balancers (ALBs) support path-based routing, which allows directing HTTP traffic to different backend services or target groups based on the URL path specified in the client's request. To implement path-based routing, a rule should be configured on the ALB to forward requests to the appropriate target group based on the URL path patterns defined in the rule. For example, requests to 'example.com/images' could be routed to one target group, while requests to 'example.com/api' could be routed to a different target group, each potentially representing different microservices.
+
+AWS Global Accelerator is the best solution for handling failover to multiple AWS regions while maintaining high availability during regional issues. It uses anycast IP addresses to route traffic to the optimal regional endpoint based on health, geographic proximity, and routing policies. Global Accelerator works with Network Load Balancers, Application Load Balancers, and EC2 instances in multiple regions, providing automatic failover between regions within seconds. It offers superior performance, availability, and fault tolerance compared to DNS-based solutions like Route 53, making it ideal for critical infrastructure that must remain available during regional disruptions.   
+
+The maximum size of a request that can be handled by Elastic Load Balancers (ELB) is 128 KB. Requests exceeding this size will result in a 400 Bad Request response from the ELB.
+
+Connection Draining, also known as Deregistration Delay, is a feature provided by AWS Elastic Load Balancing (ELB) that allows in-flight requests to complete before an EC2 instance is deregistered or terminated. When an instance is scheduled for termination, if connection draining is enabled, the ELB stops routing new requests to the instance but maintains the existing connections until they complete or the maximum timeout is reached. This helps in minimizing service disruption and ensuring a smooth transition without dropping active requests. Therefore, enabling connection draining is the key precautionary step to minimize disruption during scheduled EC2 instance terminations.
+
+An Application Load Balancer supports up to 10 target groups. When you register targets with your target group, the target group handles routing traffic to registered targets.
+
+ALB is designed to handle sudden and volatile traffic patterns and can scale to millions of requests per second, making it an ideal choice for modern web architectures and dynamic applications.
+
+The Application Load Balancer (ALB) supports SSL/TLS termination on back-end instances, while Classic Load Balancer (CLB) only supports it on the load balancer itself and Network Load Balancer (NLB) does not support it at all.
