@@ -54,7 +54,21 @@ Advantages:
   - The true IP of the client is inserted in the header X-Forwaded-For
   - We can also get post(X-Forwaded-Port) and proto(X-Forwaded-Proto)
 
+Network Load Balancers: Layer 4
+- Forward TCP and UDP traffic to your instances
+- Hande millions of requests per second
+- Ultra low latency
 
+NLB has only 1 static IP per AZ  and support assigning Elastic IP, usedful for exposing your application with one IP
+(helpful for whitelisting specific IP)
+NLB are used for extreme performance TCP and UDP trafic
+note: this is not included in free tier
 
-
+Network Load Balancers target groups:
+- Source traffic can be TCP, but NLB can then send traffic to destination as TCP or HTTP
+- Target Groups can be EC2 instances
+- If target groups are IP Addresses - then they must be private IP's
+- Target can be an application load balancer as well - the reason for this would be that we NLB would give us the fixed IP addresses 
+since one elastic IP per AZ is dedicated to NLB, and then we can also use the rules of ALB to further divert traffic as per our need
+- Heath Checks supported by the network load balancer target groups include TCP, HTTP and HTTPS protocol
 
