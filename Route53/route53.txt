@@ -1,0 +1,11 @@
+Route53 Notes:
+An AWS Direct Connect Gateway allows a business to establish a connection between their on-premises environment and multiple AWS Regions using AWS Direct Connect. 
+
+AWS Direct Connect is used to connect third-party data centers and colocation facilities to AWS.
+Creating a new 1Gbps connection and using LAG to bundle the connections will allow the user to increase bandwidth while maintaining redundancy and high availability. 
+
+Setting up Direct Connect Gateways with multiple virtual interfaces to different regions is the most recommended solution as it provides the ability to connect to multiple VPCs in different regions through a single Direct Connect Gateway.
+
+Direct Connect Gateway, as it supports transit virtual interfaces and can be associated with multiple VPCs in a region, allowing VPCs to be accessed from the on-premises data center. 
+
+VPC peering allows direct traffic routing between VPCs using private IP addresses. The other options are not suitable for this scenario.
