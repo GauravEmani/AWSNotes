@@ -1,0 +1,53 @@
+RDS Custom:
+- Managed Oracle and Microsoft SQL Server Database with OS and database customization
+- RDS: Automates setup, operation and scaling of database in AWS
+- Custom: acess to nderlying database and OS so you can 
+  - configure setting
+  - install patches
+  - enable native features
+  - access the underlying EC2 instance with ssh or ssm session manager
+- De-activate Automation Mode to perform your customization better to take a DB snapshort before
+
+RDS vs RDS Custom
+  - RDS: entire database and OS to be managed by AWS
+  - RDS Custom: full admin access to the underlying OS and the database
+
+Amazon Aurora:
+- Aurora is properietary technology on AWS (not open source)
+- Postgres and MySQL are both supported as Aurora DB (that means your drivers will work as if Aurora was a Postgre or MySQL database
+- Aurora is AWS cloud optmized and claims 5x performance improvement over MySQL on RDS, over 3x perfomance of Postgres on RDS
+- Aurora storage automatically grows in increments of 10 GB upto 128TB
+- Aurora can have upto 15 replicas and the replication process is faster than MySQL (sub 10 ms replica lag)
+- Failover in Autota is instantaneous. Its HA native.
+- Aurora costs mre than RDS (20% more) - but is more efficient
+
+Aurora High Availability and Read Scaling
+- 6 copies of your data across 3 AZ
+  - 4 copies out of 6 needed for writes
+  - 3 copies out of 6 needed for reads
+  - Self healing with peer-to-peer replication                                                   
+  - Storage is triped across 100's of volumes
+- One Aurora instance takes writes (master)
+- Automated failover for master in less than 30 secs
+- Master + upto 15 Aurora read repplicas serve reads
+
+Features of Aurora:
+- Automatic Fail over
+- Backup and Recovery
+- Isolation and Security
+- Industry Compliance
+- Push button scaling
+- Automated Patching with zero downtime
+- Advanced Monitoring
+- Routine Maintenance
+- Backtrack: restore data at any point of time without using backups
+
+
+                                                      
+
+
+
+
+
+                                                      
+                                                      
