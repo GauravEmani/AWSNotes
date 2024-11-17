@@ -1,0 +1,97 @@
+SQS Notes:
+
+Oldest Offering (10 years old)
+Fully Managed Service, used to decouple applications
+
+Attributes:
+- unlimited throughput, unlimited number of messages in queue
+- default retention of messages: 4days, maximum of 14 days
+- low latency (<10ms on publish and receive)
+- limitation of 256KB per message sent
+
+Can have duplicate messages (at least once delivery)
+Can have out of order messages
+
+SQS: Producing messages
+
+Produced to SQS using SDK (send message api)
+The message is persisted in SQS until a consumer deletes it
+Message retention: default 4 days upto 14 days
+
+Example: send an order to be processed
+	- order id
+	- customer id
+	- any attributes you want
+
+SQS: Consuming messages
+
+Consumers (running on EC2, servers or lambdas or on-premises)
+
+Queues <--> Consumer (polls the queue for order details, then delete message from the queue) --> RDS
+
+SQS Multiple EC2 Instances Consumers
+
+
+  	--  Consumer Ec2
+Queue	--  Consumer EC2
+	--  Consumer EC2
+
+Consumers receive and process messages in parallel
+At least one delivery
+Best effort message ordering
+Consumers delete messages after processing them
+We can scale consumers horizontally to improve throughput processing
+
+We can associate an SQS with Autoscaling group of ec2 instances and have the cloud watch m
+Metric of queue length configured to rigger horizontal scaling
+
+SQS Security:
+Encryption:
+Inflight encryption using HTTPS API
+At rest encryption using KMS keys
+Client side encryption if the client wants to perform encryption/decryption itself
+
+Access Controls: IAM policies to regulate access to SQS API
+
+SQS Access Policies (similar to S3 bucket policies)
+ - useful for cross account access to SQS queues
+ - useful for allowing other services (SNS, S3...) to write to an SQS queue
+
+SQS Message visibility timeout
+After a message has been polled by a consumer it becomes invisible to other consumers
+By default message visibility timeout is 30 secs
+Which means any other consumers requesting the message will not be receive the message for 
+30 secs, this means the message has 30 secs to be processed
+After the visibility timeout has passed and the message has not been processed/deleted by the first consumer then the message will be back in the queue for other consumers to read
+
+If we don't process the message within a visibility timeout then the message will be processed twice
+
+If the consumer needs more time to process the message, then it should call the ChangeMessageVisibility API to increase the timeout to avoid it from getting processed twice.
+
+SQS Long Polling
+When a consumer requests for a message from a queue, the queue can optionally wait fort he message to arrive if there are none in the queue, this is long polling.
+This reduces number of api calls to queue while increasing efficiency by reducing latency
+Long polling can be set between 1 - 20 secs, can be enabled at queue level or api level
+
+FIFO queue:
+- first in first out
+- messages will be ordered, as the first message queue will be the first to leave
+- limited throughput 300/sec without batching and with batching 3000/secs
+- exactly once-send capability (by removing duplicates)
+- messages are processed in order
+- queue name is to be created with .fifo
+
+SQS with ASG
+can be used to handle heavy loads and ensure that the transaction is not lost
+
+SNS:
+When you want to send one message to many receivers
+Event producer only sends message to one SNS topic
+Many event receivers/subscriptions listen to the SNS topic
+Each subscriber of the topic will get all the messages
+Upto 125000000 subscriptions allowed per topic
+100,000 topics limit
+
+
+
+
