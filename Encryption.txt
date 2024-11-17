@@ -1,0 +1,77 @@
+Why encryption?
+Encryption in flight (TLS/SSL)
+- data is encrypted before sending and decrypted after receiving
+- TLS certificates help with encryption (HTTPS)
+- Encryption in light ensures no MITM (man in the middle) attack can happen
+
+Server Side encryption at Rest
+- Data is encrypted after being received by the server
+- Data is decrypted before being sent
+- It is stored in an encrypted form thanks to a ley (usually a data key)
+- The encryption/decryption keys must be managed somewhere, and the server must have access to it
+
+Client Side encryption
+- Data is encrypted and decrypted at client side 
+- data encrypted by client is never decrypted at server
+- server should not be able to decrypt the data
+- could leverage envelope encryption
+
+KMS Overview (KEy Management Service)
+- Anytime you hear encryption for an aws service its most likely KMS
+- AWS manages encryption keys for us
+- fully integrated with IAM for authorization
+- easy way to control access to your data
+- able to audit kms key usage using cloud trail
+- seamlessly integrated into most of the aws services(EBS, S3, RDS, SSM...)
+- Never store your secrets in plain text, especially in your code
+  - kms key encryption also available through api calls(SDK,CLI)
+  - encrypted secrets can be stored in the code / environment variables
+
+KMS Key types:
+KMS keys is the new name for KMS Customer master key
+Types of keys:
+  - Symmetric
+    - Single encryption key that is used to encrypt / decrypt
+    - AWS services that are integrated with KMS use symmetric CMK's
+    - you never get access to the KMS Key unencrypted (must call KMS api to use)
+ - Asymmetric:
+    - public (encrypt) and private key(decrypt) pair
+    - used for encrypt/decrypt, or sign/verify operations
+    - the pulic key is downloadable, but you cant access the private key unencrypted
+    - user case: encryption outside of AWS by users who cant call the kms api
+
+Types of KMS Keys:
+  - AWS Owned keys(free): SSE-S3, SSE-SQS, SSE DDB (default key)
+  - AWS Managed keys: free (aws/service-name, example: as/rds or aws/ebs)
+  - Customer managed keys created in KMS: 1$/month
+  - Customer managed keys imported - 1$/month
+  - + pay for API call to KMS (0.003$/10000 calls)
+
+Automatic key rotation:
+  - AWS managed KMS key: automatic every 1 year
+  - Customer managed KMS key: (must be enabled) atuomatics and on-demand
+  - Importted KMS key: only manual rotation possible using alias
+  - imported KMS key
+
+KMS key policies:
+- control access to kms keys is similar to S3 bucket
+- difference: you cannot access without them
+
+Default kms key policy:
+- created is you dont provide a specific kms key policy
+- complete access to the key to the root user = entire AWS account
+
+Custom KMS key policy
+- define users, roles that can access the kms key
+- define who can administer the key
+- useful for cross-account access of you kms key
+
+When is the custom KMS key policy useful
+- copying snapshots across accounts
+  - create a snapshot, encrypted with your own kms key(Customer managed key)
+  - attach the kms policy to authorize cross account access
+  - share the encrypted snapshot
+  - (in target) create a copy of the snapshot, encrypt it with a CMK in your account
+  - create a volume in the target account
+
+
