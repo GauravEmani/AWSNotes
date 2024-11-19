@@ -1,0 +1,61 @@
+Security Groups and NACL's:
+
+----------------------------
+
+NACL is stateless ( the traffic inbound and outbound will be checked everytime), epemeral ports
+
+NACL are like a firewall which control traffic to and from subnets
+
+One NACL per subnet, new subnets are assigned to Default NACL, so NACL's operate at subnet level
+
+NACL's support both allow and deny rules
+
+You define NACL rules:
+
+               Rules have a number (1 - 32766), higher precedence with lower number (1, 2, 3 etc..)
+
+               First rule match will drive the decision
+
+               Example: if you define #100 ALLOW 10.0.0.10/32 and #200 deny 10.0.0.10/32, the IP address will be allowed because 100 has a higher precedence over 200
+
+               The last rule is an asterisk (*) and denies a request in case of no rule match
+
+               AWS recommends adding rules by increment of 100
+
+              
+
+Newly created NACL will deny everything
+
+Default NACL sitting over subnets will allow everything (inbound/outbound).
+
+ 
+
+Security Groups are stateful ( any traffic inbound is automatically allowed outbound)
+
+Operates at instance level
+
+Support allow on rules
+
+ 
+
+ 
+
+ 
+
+Ephemeral Ports:
+
+-----------------
+
+Random port which are assigned just for connection life
+
+Ports are used for any 2 endpoints to establish connection
+
+Clients connect to a defined port and expect a response on an ephemeral port
+
+               - since client does not have any specific port by default, so client opens an ephemeral port to receive the response
+
+Different Operating systems use different port ranges, example
+
+               IANA & MS Windows 10 use the range - 49152 to 65535
+
+               Many Linux Kernels use the range - 32768 to 60999
