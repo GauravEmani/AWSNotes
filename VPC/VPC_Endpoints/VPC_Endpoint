@@ -17,3 +17,37 @@ What to use?
 Gateway most likely prefered solution in exams
 Interface Endpoint is preferable over Gateway Endpoint when you need access from on-premises (Site to Site VPN or Direct Connect), a different VPC or a different region)
 
+More Notes
+Service on AWS such as dynamodb or S3 are accessible via internet
+
+VPC endpoint allows you to access the resources which are accessible publicly or via internet, privately without having to go to the internet via NAT Gateway and then connect to the AWS resource such as dynamodb or S3
+
+Every AWS Service is publicy exposed (public URL) and connecting to a resource privately via VPC endpoint ensures that the traffic does not leave the VPC. They remove the need of IGW, NATGW.. to access the resource. Eg: EC2(private subnet) -> NATGW -> IGW -> SQS/SNS
+
+ 
+
+There are 2 types of VPC endpoints
+
+1. Interface Endpoint 2. Gateway Endpoint
+
+ 
+
+Interface Endpoint:
+
+Powered by PrivateLink
+
+Provisions an ENI (private IP address) as an entry point (must attach a security group)
+
+Supports most AWS services
+
+$ per hour + $ per GB of data processed
+
+ 
+
+Gateway Endpoints
+
+Provisions a gateway and must be used as a target in a route table (does not use security groups)
+
+Support both S3 and DynamoDB
+
+Free (no charges
