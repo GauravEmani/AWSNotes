@@ -1,0 +1,343 @@
+AWS VPC Notes:
+
+NAT Gateway:
+
+Managed by AWS
+
+Enable instances in private subnets to connect to the internet ( outbound only )
+
+Always deployed in public subnets
+
+Should have an elastic ip (public ip) associated with it to talk to IGW
+
+Provides automatic HA within an AZ and can be placed in multiple AZ's
+
+Does not allow SSH
+
+No need for Security Group
+
+Does not support port forwading
+
+ 
+
+NAT Instance:
+
+Managed by you
+
+Scale up manually
+
+HA possible using multiple NATs in multiple subnets
+
+Can be used as bastion hosts, so SSH allowed
+
+Need to assign Security Group
+
+Can implement port forwading through manual customization
+
+ 
+
+ 
+
+CIDR: Classless Inter-Domain Routing
+
+--------------------------------------
+
+- a method to allocate ip's
+
+- used in security groups and AWS networking
+
+               These help define ip address range
+
+               - x.x.x.x/32  - one IP
+
+               - 0.0.0.0/0   - all IP's
+
+               - 192.168.0.0/26 -> 192.168.0.0 to 192.168.0.63 ( 64 IP addresses )
+
+- How does CIDR work:
+
+               - Base IP             
+
+                              - xx.xx.xx.xx (0.0.0.0, 192.168.0.0)
+
+               - Subnet Mask
+
+                              - defines how many bits can change in the IP
+
+                              - example /0, /24, /32
+
+                              - /8 -> 255.0.0.0
+
+                              - /16 -> 255.255.0.0
+
+                              - /24 -> 255.255.255.0
+
+                              - /32 -> 255.255.255.255
+
+- Understanding CIDR
+
+               - Subnet Mask allows part of the underlying ip to get the next value/s from base ip
+
+                              - 192.168.0.0 /32  - allows for 1 IP (2^0) = 192.168.0.0
+
+                              - 192.168.0.0 /31  - allows for 2 IP (2^1) = 192.168.0.0 -> 192.168.0.1
+
+                              - 192.168.0.0 /30  - allows for 4 IP (2^2) = 192.168.0.0 -> 192.168.0.3
+
+                              - 192.168.0.0 /29  - allows for 8 IP (2^3) = 192.168.0.0 -> 192.168.0.7
+
+                              - 192.168.0.0 /28  - allows for 16 IP (2^4) = 192.168.0.0 -> 192.168.0.15
+
+              
+
+There are 4 octets in the ip range X.X.X.X
+
+/32 - no octet can change                                           192.168.0.0     ( 1 IP)
+
+/24 - last octet can change                                         192.168.0.255   (256 IP's)
+
+/16 - last 2 octets can change      192.168.255.255 (65536 IP's)
+
+/8  - last 3 octets can change                       192.255.255.255
+
+/0  - all octets can change                                           255.255.255.255 
+
+ 
+
+Public vs Private IP (IPv4)
+
+----------------------------
+
+- Internet Assigned Numbers Authority (IANA) established certain blocks of IPv4 addresses for the use of private(LAN) and public (Internet) addresses
+
+ 
+
+               - Private IP can only allow certain values:
+
+                              - 10.0.0.0 to 10.255.255.255 (10.0.0.0/8) -> in big networks
+
+                              - 172.16.0.0 to 172.31.255.255 (172.16.0.0/12) -> AWS default VPC in that range
+
+                              - 192.168.0.0 to 192.168.255.255 (192.168.0.0/16 -> home network
+
+                             
+
+               - All the rest of the IP addresses on the internet are public
+
+              
+
+VPC:
+
+--------
+
+Can have multiple VPC's in a region
+
+               - max of 5 per region (soft limit) and can be increased
+
+MAX CIDR per VPC is 5
+
+               - For each cidr
+
+                              Min Size is /28 ( 16 IP addresses )
+
+                              Max Size is /16 ( 65536 IP addresses )
+
+Since VPC is private, only private IPV4 ranges are allowed
+
+               - 0.0.0.0 to 10.255.255.255 (10.0.0.0/8)
+
+               - 172.16.0.0 to 172.31.255.255 (172.16.0.0/12)
+
+               - 192.168.0.0 to 192.168.255.255 (192.167.0.0/16)
+
+ 
+
+Rules to select CIDR :
+
+               - VPC cidr do not overlap with ip addresses of other networks
+
+              
+
+Subnets:
+
+----------
+
+AWS reserves 5 ip addresses (first 4 and last 1) in each subnets
+
+These ip addresses are not available for use and cant be assigned to any EC2 instances
+
+Example: if CIDR block is 10.0.0.0/24, then reserved IP addresses are:
+
+               - 10.0.0.0 - Network Addresses
+
+               - 10.0.0.1 - reserved by AWS for the VPC router
+
+               - 10.0.0.2 - reserver by AWS for mapping to Amazon provided DNS
+
+               - 10.0.0.3 - reserved for future use
+
+               - 10.0.0.4 - network broadcast addresses, but AWS does not support broadcast, hence stays reserved.
+
+ 
+
+so always choose subnets by calculating ip addresses range - 5
+
+ 
+
+Internet Gateway (IGW):
+
+-----------------------
+
+Allows resources in a VPC to connect to the internet
+
+Scales horizontally and is highly available and redundant
+
+Must be created separately for VPC
+
+One VPC can only be attached to one IGW and vice versa
+
+ 
+
+Internet Gateways on their own do not allow internet access
+
+We must edit route tables to make it work
+
+ 
+
+For Public Route Table internet access for Public Subnet
+
+Example: If we need to access the EC2 instance from internet then we need to do the following:
+
+1. Create an internet gateway and attach it to the VPC
+
+2. We will now create a route table and assign it to the VPC
+
+3. Now Assign subnets (public subnets) to route table created
+
+4. Edit the route table, edit the routes and add a new route for 0.0.0.0/0 to point to internet gateway
+
+5. This will now allow internet access of the traffic to internet gateway
+
+ 
+
+ 
+
+Bastion host:
+
+---------------
+
+We can use a bastion host to SSH into our private EC2 instances
+
+The bastion is in public subnet which is then connected to all other private subnets
+
+Bastion host security group must allow all inbound from internet on port 22 from restricted CIDR, for example the public CIDR of your corporation.
+
+Security group on EC2 instances must allow the security group of the bastion host or private IP of the bastion host
+
+ 
+
+ 
+
+For internet access to Private Subnets via private route table:
+
+1. Launch an EC2 host in public subnet and name it Bastion host
+
+2. Create a keypair under Network and Security eg: DemoKeyPair, we will need this to SSH into private subnet, download this key pair on your local and we will use the content of pem file to ssh into ec2 instance in private subnet
+
+3. Create an ec2 instance in private subnet eg:- private subnet Addresses
+
+4. Create a security group - to allow ssh from bastion host
+
+               - under inbound security rules for type = ssh, security type = custom, source = security group of the Bastion Host)
+
+5. We connect to Bastion Host and run the following commands
+
+               - ssh ec2user@<private-ip of EC2 instance in private subnet> -i DemoKeyPair.pem
+
+               (note: We will first create a new DemoKeyPair.pem using vi DemoKeyPair.pem and paste the content of the key dowloaded in step2, then run a chmod 0400 DemoKeyPair.pem)
+
+6. We now should be able to enter the Ec2 instance in private subnet
+
+ 
+
+More:
+
+If you trying running "ping google.com" this will not run as the EC2 does not have outbound access to internet.
+
+This is where we use NAT Gateway or NAT instance
+
+ 
+
+NAT Instance (outdated but good to know):
+
+-------------------------------------------
+
+Allow EC2 in private subnets to connect to the internet ( outbound EC2 private subnet  -> Nat instance -> internet/ specific server)
+
+ 
+
+NAT instance must be launched in public subnet
+
+Must disable EC2 setting: Source/Destination check
+
+Must have Elastic IP attached to it
+
+Most imp: Route tables must be configured to route traffic from private subnets to the NAT Instance
+
+NAT instance had a preconfigured Amazon Linux AMI which had reached the end of standard support on december 2020
+
+ 
+
+How to setup a NAT instance:
+
+1. Create an EC2 in public subnet and use the AMI image specific to NAT
+
+2. Create a security group with the following config:
+
+               - Allow ssh from anywhere
+
+               - Allow http from within the VPC cidr range (eg:-10.0.0.0/16)
+
+               - Allow https from within the VPC cidr range (eg:-10.0.0.0/16)
+
+               - Allow ICMP - IPv4 from within the VPC cidr range (eg:-10.0.0.0/16)  - this is used in "ping"
+
+              
+
+3. Edit the Networking setting ( Stop the source and destination check)
+
+4. Go to route table and edit the route table for private subnets( if created already, else create a route table for private subnets)
+
+5. Add a route where destination = 0.0.0.0/0 and Target is the NAT instance ( this means allows traffic to internet, it must be through NAT instance)
+
+6. Try the ping command from within the Private EC2 instance on private subnet and it should work
+
+ 
+
+NAT Gateway:
+
+---------------
+
+AWS managed NAT, highr bandwidth, HA.
+
+Pay per hour
+
+NAT GW is created in a specific AZ, uses an Elastic IP
+
+Can't be used by EC2 instance within the same subnet (only from other subnets)
+
+Requires an IGW ( private subnet -> NAT Gateway -> IGW)
+
+5 Gbps of bandwidth and scalable to 100 Gbps
+
+No Security groups to be managed
+
+NAT is resilient within one AZ, for multiple AZ we will need multiple NAT Gateways
+
+ 
+
+How to setup:
+
+Install NAT gateway on public subnet
+
+Edit route table for private subnet to allow access to NAT Gateway.
