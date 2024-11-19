@@ -1,0 +1,139 @@
+AWS Route 53:
+
+ 
+
+DNS?
+
+ 
+
+Domain Name System which translates the human friendly hostnames into machine IP address
+
+example:
+
+www.google.com => 172.217.18.36
+
+DNS is the backbone of the internet
+
+ 
+
+Heirarchical naming structure
+
+               .com, example.com, api.example.com
+
+              
+
+DNS Terminologies
+
+Domain Registrar: Amazon Route53, GoDaddy etc..
+
+DNS records: A, AAAA, CNAME, NS,..
+
+Zone File: Contains DNS records
+
+Name Server: resolves DNS queries (Authoritative or Non Authoritative)
+
+Top Level Domain (TLD): .com, .us, .in, .gov
+
+Second Level Domain (SLD): amazon.com, google.com
+
+ 
+
+ 
+
+http://api.www.example.com.  - URL
+
+ 
+
+.com - TLD
+
+example.com - SLD
+
+www.example.com - Sub Domain
+
+api.www.example.com - FQDN
+
+http - protocol
+
+ 
+
+Route 53 is a domain registrar
+
+- how to route traffic
+
+- record contains
+
+               - domain/subdomain
+
+               - record type - A or AAAA
+
+               - value - 12.34.56.78
+
+               - ttl - amount of time record cached at DNS resolvers
+
+- route53 supports following DNS record types
+
+               - (must know) A/AAAA/CNAME/NS
+
+               - (advanced) CAA/DS/MS/NAPTR/PTR/SOA/TXT/SPF/SRV
+
+ 
+
+A - maps hostname to IPv4
+
+AAAA - maps hostname to IPv6
+
+CNAME - maps a hostname to another hostname
+
+                              - the target is a domain name which must have an A or AAAA record
+
+                              - Cant create a CNAME record for the top node of a DNS namespace (Zone Apex)
+
+                              - Example: you cannot create a CNAME for example.com but can create for www.example.com
+
+NS - Names Servers for the hosterd Zone, which are the ip addresses which can respond to DNS quesries to the hosted zones
+
+ 
+
+What are Hosted Zones?
+
+ 
+
+A container for records that define how to route traffic to a domain and its subdomains
+
+ 
+
+There are 2 types of hosted zones:
+
+Public Hosted Zones - Contains records that specify thow to route traffic on the internet(public domain names)
+
+application1.mypublicdomain.com
+
+Private Hosted Zones - Contain records that specify how you route traffic within one of more VPCs(private domain names)
+
+application1.companyinternal
+
+ 
+
+chargeable at 50 cents per month
+
+ 
+
+TTL ?
+
+High TTL: eg -24hrs
+
+               - Less traffic on route53
+
+               - possibly outdated records
+
+Low TTL: eg - 60 sec
+
+               - More traffic on route 53 (increase in cost)
+
+               - Records are outdated for less time
+
+               - easy to change records
+
+ 
+
+TTL is mandatory for each DNS record except the Alias record
