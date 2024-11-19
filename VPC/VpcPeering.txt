@@ -1,0 +1,41 @@
+VPC Peering
+
+-----------------
+
+Privately connect 2 VPCs using AWS network
+
+Make them behave as if they were in the same network
+
+Must not have overlapping CIDRs
+
+VPC peering is not transitive A - B, B - C then its not A - C, we will have to setup and A - C vpc peering
+
+VPC Peering connection can be made between different VPC's in different AWS accounts/regions
+
+You can reference a security group in a peered VPC (works cross account - same region)
+
+eg: vpc-1234/sg-024f24hvg4hbj2 as source in inbound rules
+
+ 
+
+ 
+
+Steps to Peer VPC's
+
+1. Go to VPC > Peering connection
+
+2. Give it a name eg:- DemoVPCPeering
+
+3. Select the requestor VPC eg:- VPC1
+
+4.Select another VPC to connect to which is would either be in same account, same region or different
+
+5. Provide the VPC to connect with (acceptor VPC) eg:- VPC 2
+
+6. Add the entry into route table of each VPC1, you will add the CIDR range of VPC2 as Destination and Target as VPC peering connection name - DemoVPCPeering
+
+7. Add an entry to the route table for VPC 2, you will add the CIDR range of VPC 1 as Detination and Target as VPC Peering connection name - DemoVPCPeering
+
+8. This should now allow traffic between both VPC's
+
+ 
