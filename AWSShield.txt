@@ -1,0 +1,13 @@
+AWS Shield: To protect from DDos attach
+
+DDos: Distruibuted denial of service - many requests at the same time
+AWS Shield Standard:
+  - Free service that is activiated for every AWS customer
+  - Provide protection from attacks such as SYN/UDP Floods, Reflection and other layer 3/laer 4 attacks
+
+AWS Shield Advanced:
+  - Optional DDos migration service ($3000 per month per organization)
+  - Protect against more sophistcated attack on Amazon EC2, ELB, CloudFront, AWS GLobal Accelerator and Route53
+  - 23/7 access to AWS DDos support team
+  - Protect against higher fees during usage sikes due to DDos
+  - Sheild advanced automatic applicatio layer DDos mitigation autmatically creates evaluates and deploys AWS WAF rules to mitidate later 7 attacks
