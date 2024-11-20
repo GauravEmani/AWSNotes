@@ -1,0 +1,28 @@
+Web Application Firewall
+
+Protects your web application from common web exploits (Layer 7)
+Layer 7 is HTTP(vs Layer 4 which is TCP/UDP)
+
+Deploy on
+  - Application Load Balancer
+  - API Gateway
+  - CloudFront
+  - AppSync GraphQL AP
+  - Cognito user pool
+
+Define Web ACL (Web Access Control List) Rules:
+  - IP Set uptp 10,000 addresses - use multiple Rules for IP's
+  - HTTP header, body, or URI string protects from common attack - SQL injection
+  - Size constraints, geo-match (block countries)
+  - Rate based rules (avoid getting more than 10 requests from one IP)
+
+WEB ACL are regional except for CloudFront
+A rule group is a reusable set of rules thta you can add to a WEB ACL
+
+Scenario: WAF - Fixed IP while using WAF with ALB
+  - WAF does not support NLB (WAF operate on Layer 7, hance we use Application Load Balancer which operates on Layer 7)
+  - Application load balance does not have fixed IP's (to solve this issue we will use a Global Accelarator for Fixed IP)
+  - Now we enable WAF on ALB
+  - So the flow would be as below
+
+Users  --> Global Accelerator (Fixed IP)  --> Region --> Application Load Balancer (<--> WAF)  --> EC2 instances
