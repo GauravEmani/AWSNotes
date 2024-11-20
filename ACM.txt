@@ -1,0 +1,37 @@
+Amazon Certificate Manager
+Easily provision,manage and deploy TLS Certificates
+Provide in-flight encryption for websites (HTTPS)
+Supports both public and private TLS certificates
+Free of charge for public TLS certificates    
+Automatic TLS certificate renewal
+Integrations with (load TLS certificates on)
+- Elastic Load Balancer
+- Cloufront Distribution
+- API's on API Gateway
+
+You cannot use ACM with
+  - EC2 instance
+
+ACM Requesting Public certificates
+1. List domain names to be included in the certificate
+  - FQDN :(example - corp.example.com)
+  - Wildcard Domain - *.example.com
+2. Select the Validation method : DNS Validation or Email validation
+  - DNS Validation is preferred for automation purposes
+  - Email validation will send emails to contact addresses in WHOIS database
+  - DNS validation will leverage a CNAME record to DNS config (ex:Route53)
+3. It will take a few hours to get verified
+4. The public certificate will be enrolled for automatic renewal
+  - ACM automatically renews ACM generated certificates 60 days before expiry
+
+ACM importing public certificate
+  - Option ot generate certificate outside of ACM and import it
+  - No automatic renewal, must create a new certificate and import before expiry
+  - ACM sends dailty expiration events 45 days to exoiry
+    - No of days can be configured
+    - Events related to expiry will start appearing in event bridge
+  - AWS Config has a managed rule named acm-certificate-expiration-check to check for expiring ceritficates
+
+ACM -> EventBridge -> (Lambda / SNS / SQS)
+AWS Config -> ACM(rule check) -> AWS Config -> EventBridge - (Lambda / SNS / SQS)
+
